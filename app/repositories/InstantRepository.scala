@@ -1,7 +1,7 @@
-package controllers.repositories
+package repositories
 
-import play.api.db.Database
 import anorm._
+import play.api.db.Database
 
 import java.time.Instant
 import javax.inject.{Inject, Singleton}
