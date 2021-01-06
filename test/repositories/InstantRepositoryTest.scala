@@ -1,6 +1,5 @@
 package repositories
 
-import controllers.repositories.InstantRepository
 import org.scalatest.{Inspectors, TryValues}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -43,7 +42,7 @@ class InstantRepositoryTest
   "list()" should "read java8 instant with nano precision" in {
     val allValues: List[Instant] = repository.list().success.value
 
-    // ok, no problem without nanosecods
+    // ok, no problem without nanoseconds
     forExactly(1, allValues) { instant =>
       instant.getNano shouldBe instantWithoutNano.getNano
     }
