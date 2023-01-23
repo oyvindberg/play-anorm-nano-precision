@@ -10,7 +10,7 @@ import play.api.mvc.EssentialFilter
 import play.api.routing.Router
 import play.api.{BuiltInComponentsFromContext, Configuration}
 
-import java.time.{Instant, ZoneId, ZonedDateTime}
+import java.time.{Instant, LocalDateTime, ZoneId}
 
 class ZonedDateTimeRepositoryTest
     extends AnyFlatSpec
@@ -35,34 +35,33 @@ class ZonedDateTimeRepositoryTest
 
   lazy val repository: ZonedDateTimeRepository = new ZonedDateTimeRepository(components.dbApi.database(dbName))
 
-  val zonedDateTimeWithoutNano: ZonedDateTime = ZonedDateTime.ofInstant(Instant.parse("2021-01-06T08:22:31.111Z"), ZoneId.systemDefault())
-  val zonedDateTimeWithNano: ZonedDateTime = ZonedDateTime.ofInstant(Instant.parse("2021-01-06T08:22:31.222456Z"), ZoneId.systemDefault())
+  val zonedDateTimeWithoutNano: LocalDateTime = LocalDateTime.ofInstant(Instant.parse("2021-01-06T08:22:31.111Z"), ZoneId.systemDefault())
+  val zonedDateTimeWithNano: LocalDateTime = LocalDateTime.ofInstant(Instant.parse("2021-01-06T08:22:31.222456Z"), ZoneId.systemDefault())
 
   it should "insert a ZonedDateTime WITHOUT nano precision and return the inserted value" in {
     val id = 1
-    val addedValue: ZonedDateTime = repository
+    val addedValue: LocalDateTime = repository
       .add(id, zonedDateTimeWithoutNano)
       .success
       .value
 
     addedValue shouldBe zonedDateTimeWithoutNano
 
-    val actual: ZonedDateTime = repository.get(id).success.value
+    val actual: LocalDateTime = repository.get(id).success.value
     actual.getNano shouldBe zonedDateTimeWithoutNano.getNano
   }
 
   // test fails
   it should "insert a ZonedDateTime instant WITH nano precision and return the inserted value" in {
     val id = 2
-    val addedValue: ZonedDateTime = repository
+    val addedValue: LocalDateTime = repository
       .add(id, zonedDateTimeWithNano)
       .success
       .value
 
     addedValue shouldBe zonedDateTimeWithNano
 
-    val actual: ZonedDateTime = repository.get(id).success.value
+    val actual: LocalDateTime = repository.get(id).success.value
     actual.getNano shouldBe zonedDateTimeWithNano.getNano
   }
-
 }
